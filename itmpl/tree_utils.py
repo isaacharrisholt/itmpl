@@ -3,8 +3,6 @@ from pathlib import Path
 from typing import Callable, Optional
 
 
-# A function that takes two directories, and returns all the files in the second
-# directory that are present in the first directory.
 def find_duplicates(
     source: Path,
     destination: Path,
@@ -19,13 +17,17 @@ def find_duplicates(
 
     for item in source.iterdir():
         if ignore(item):
+            # Item is ignored
+            continue
+        elif not (destination / item.name).exists():
+            # Item does not exist in destination
             continue
         elif item.is_dir():
+            # Item is a directory, so recurse
             yield from find_duplicates(item, destination / item.name)
-        else:
-            destination.mkdir(parents=True, exist_ok=True)
-            if (destination / item.name).exists():
-                yield destination / item.name
+        elif (destination / item.name).exists():
+            # Item is a file and exists in destination
+            yield destination / item.name
 
 
 def copy_tree(
@@ -47,3 +49,12 @@ def copy_tree(
         else:
             destination.mkdir(parents=True, exist_ok=True)
             shutil.copy2(item, destination / item.name)
+
+
+def reursive_delete(directory: Path, glob: str) -> None:
+    """Delete all files in a directory matching a glob."""
+    for file in directory.rglob(glob):
+        if file.is_file():
+            file.unlink()
+        else:
+            shutil.rmtree(file)

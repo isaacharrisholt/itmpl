@@ -49,3 +49,6 @@ line-length = 88
 
 [tool.pyright]
 pythonVersion = "3.8"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

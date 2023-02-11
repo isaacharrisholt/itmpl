@@ -2,10 +2,9 @@ from pathlib import Path
 
 import typer
 from rich import print
-from rich.columns import Columns
 from typer import Typer
 
-from itmpl import global_vars, tree_utils
+from itmpl import global_vars, templating
 
 app = Typer()
 
@@ -20,35 +19,34 @@ def new(
     template: str,
     name: str,
     path: Path = Path("."),
+    force: bool = typer.Option(False, "--force", "-f"),
 ):
     template_options = [
         t.name for t in global_vars.TEMPLATES_DIR.iterdir() if t.is_dir()
     ]
 
     if template not in template_options:
-        columns = Columns(template_options, equal=True, expand=True)
         print(
             f"[red]Template [white]{template}[/white] not found. "
             f"Available templates:[/red]"
         )
-        print(columns)
+        print("\n".join(template_options))
         raise typer.Exit(1)
 
-    duplicates = list(
-        tree_utils.find_duplicates(global_vars.TEMPLATES_DIR / template, path / name)
+    # Allow the user to template in this directory
+    if path.name == name:
+        path = path.parent
+
+    destination = path / name
+
+    templating.render_template(
+        project_name=name,
+        template=template,
+        destination=destination,
+        prompt_if_duplicates=not force,
     )
 
-    if duplicates:
-        print("[red]The following files already exist and will be overwritten:[/red]")
-        for duplicate in duplicates:
-            print(f"  {duplicate.resolve()}")
-
-        typer.confirm("Continue?", abort=True)
-
-    tree_utils.copy_tree(
-        global_vars.TEMPLATES_DIR / template,
-        path / name,
-    )
+    print(f"Created [green]{template}[/green] project at [green]{destination}[/green]")
 
 
 if __name__ == "__main__":

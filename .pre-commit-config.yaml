@@ -11,3 +11,4 @@ repos:
   rev: v0.0.245
   hooks:
     - id: ruff
+      args: [--config, ./pyproject.toml]  # Prevents Ruff adding .ruff_cache directories in templates

@@ -37,7 +37,7 @@ def write_config(config: Config):
 
 @app.command()
 def set(
-    option: ConfigOption,
+    option: ConfigOption,  # type: ignore
     value: str,
 ):
     """Set a configuration option."""
@@ -54,7 +54,7 @@ def set(
             param_hint=option.value,
         )
 
-    if model_field.type_ == Path and not (new.exists() and new.is_dir()):
+    if new and model_field.type_ == Path and not (new.exists() and new.is_dir()):
         raise typer.BadParameter(
             f"{value} is not a valid directory",
             param_hint=option.value,

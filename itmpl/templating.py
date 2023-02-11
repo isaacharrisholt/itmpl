@@ -6,8 +6,9 @@ from typing import Dict, Optional
 
 import jinja2
 import typer
-from itmpl import global_vars, tree_utils, utils
 from rich import print
+
+from itmpl import global_vars, tree_utils, utils
 
 ITMPL_MODULE: Optional[ModuleType] = None
 
@@ -16,6 +17,8 @@ class IgnoreUndefined(jinja2.Undefined):
     """Ignore undefined variables."""
 
     def __str__(self):
+        if not self._undefined_name:
+            return ""
         return "{{ " + self._undefined_name + " }}"
 
 

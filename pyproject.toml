@@ -1,10 +1,14 @@
 [tool.poetry]
 name = "itmpl"
-version = "0.0.0"
+version = "0.0.1"
 description = "A project templating and scaffolding tool"
 authors = ["Isaac Harris-Holt <isaac@harris-holt.com>"]
 license = "GPL-3.0-or-later"
 readme = "README.md"
+exclude = [
+    "**/.ruff_cache",
+    "**/__pycache__",
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"

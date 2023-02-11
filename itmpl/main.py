@@ -39,12 +39,16 @@ def new(
 
     destination = path / name
 
-    templating.render_template(
-        project_name=name,
-        template=template,
-        destination=destination,
-        prompt_if_duplicates=not force,
-    )
+    try:
+        templating.render_template(
+            project_name=name,
+            template=template,
+            destination=destination,
+            prompt_if_duplicates=not force,
+        )
+    except templating.TemplatingException as e:
+        print(f"[red]Error when templating project:[/red] {e}")
+        raise typer.Exit(1)
 
     print(f"Created [green]{template}[/green] project at [green]{destination}[/green]")
 

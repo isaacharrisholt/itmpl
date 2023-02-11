@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "itmpl"
+version = "0.0.0"
+description = "A project templating and scaffolding tool"
+authors = ["Isaac Harris-Holt <isaac@harris-holt.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+isort = "^5.12.0"
+ruff = "^0.0.245"
+pyright = "^1.1.293"
+mkdocs = "^1.4.2"
+mkdocs-material = "^9.0.12"
+mkdocs-minify-plugin = "^0.6.2"
+mkdocstrings = "^0.20.0"
+mkdocs-gen-files = "^0.4.0"
+mkdocs-section-index = "^0.3.5"
+mkdocs-literate-nav = "^0.6.0"
+pre-commit = "^3.0.4"
+pytest = "^7.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

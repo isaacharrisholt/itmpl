@@ -30,7 +30,7 @@ def _add_dev_dependencies(final_directory: Path) -> None:
     if not dev_dependencies.exists():
         return
 
-    print("Adding dev dependencies...", end=" ")
+    print("Adding dev dependencies...", end=" ", flush=True)
     subprocess.run(
         [
             "poetry",
@@ -52,7 +52,7 @@ def _add_dependencies(final_directory: Path) -> None:
     if not dependencies.exists():
         return
 
-    print("Adding dependencies...", end=" ")
+    print("Adding dependencies...", end=" ", flush=True)
     subprocess.run(
         [
             "poetry",
@@ -127,7 +127,7 @@ def post_script(
         subprocess.run(["poetry", "--version"], check=True, stdout=subprocess.DEVNULL)
     except subprocess.CalledProcessError:
         # Install poetry
-        print("Poetry is not installed, installing Poetry...", end=" ")
+        print("Poetry is not installed, installing Poetry...", end=" ", flush=True)
         subprocess.run(
             [pip_path, "install", "poetry"],
             check=True,
@@ -140,7 +140,7 @@ def post_script(
     _add_dev_dependencies(final_directory)
 
     # Install dependencies
-    print("Installing dependencies...", end=" ")
+    print("Installing dependencies...", end=" ", flush=True)
     subprocess.run(
         ["poetry", "install"],
         cwd=final_directory,

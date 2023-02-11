@@ -4,14 +4,10 @@ import typer
 from rich import print
 from typer import Typer
 
-from itmpl import global_vars, templating
+from itmpl import config, global_vars, templating
 
 app = Typer()
-
-
-@app.command()
-def hello(name: str):
-    print(f"Hello {name}")
+app.add_typer(config.app, name="config")
 
 
 @app.command()
@@ -21,9 +17,22 @@ def new(
     path: Path = Path("."),
     force: bool = typer.Option(False, "--force", "-f"),
 ):
-    template_options = [
+    c = config.read_config()
+    default_template_options = {
         t.name for t in global_vars.TEMPLATES_DIR.iterdir() if t.is_dir()
-    ]
+    }
+    extra_template_options = {
+        t.name for t in c.extra_templates_dir.iterdir() if t.is_dir()
+    }
+
+    duplicate_templates = default_template_options.intersection(extra_template_options)
+    if duplicate_templates:
+        print("[red]Duplicate templates found:[/red]")
+        print("\n".join(duplicate_templates))
+        print("[red]Please remove the duplicates and try again.[/red]")
+        raise typer.Exit(1)
+
+    template_options = default_template_options.union(extra_template_options)
 
     if template not in template_options:
         print(
@@ -51,6 +60,14 @@ def new(
         raise typer.Exit(1)
 
     print(f"Created [green]{template}[/green] project at [green]{destination}[/green]")
+
+
+@app.callback()
+def create_directories():
+    global_vars.APP_DIR.mkdir(parents=True, exist_ok=True)
+    global_vars.TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
+    c = config.read_config()
+    c.extra_templates_dir.mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":

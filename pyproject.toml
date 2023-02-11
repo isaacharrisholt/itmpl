@@ -8,6 +8,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
+typer = "^0.7.0"
+pydantic = "^1.10.4"
+jinja2 = "^3.1.2"
+rich = "^13.3.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -25,6 +29,9 @@ mkdocs-literate-nav = "^0.6.0"
 pre-commit = "^3.0.4"
 pytest = "^7.2.1"
 tox = "^4.4.5"
+
+[tool.poetry.scripts]
+itmpl = "itmpl.main:app"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

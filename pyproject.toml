@@ -38,3 +38,6 @@ line-length = 88
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]  # Ignore unused imports in __init__.py
+
+[tool.pyright]
+pythonVersion = "3.8"

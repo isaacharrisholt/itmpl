@@ -1,13 +1,18 @@
+# For successful templating, make sure the hook names are the names of the
+# Python packages the hooks are for
 repos:
 - repo: https://github.com/psf/black
-  rev: 23.1.0
+  rev: '{{ black_version }}'
   hooks:
     - id: black
+      name: black
 - repo: https://github.com/pycqa/isort
-  rev: 5.12.0
+  rev: '{{ isort_version }}'
   hooks:
     - id: isort
+      name: isort
 - repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.0.245
+  rev: 'v{{ ruff_version }}'
   hooks:
     - id: ruff
+      name: ruff

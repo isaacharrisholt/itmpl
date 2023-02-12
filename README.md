@@ -79,3 +79,14 @@ Templates can be configured through `.itmpl.toml` and `.itmpl.py` files. See
 the
 [documentation](https://isaacharrisholt.github.io/itmpl/adding_new_templates)
 for more details.
+
+## Contributing
+
+Contributions are welcome! If you find a bug, or have a feature request, please
+open a new issue. If you would like to contribute code, please open a new pull
+request.
+
+I'm always open to new templates too! I don't know every possible use case for
+this tool, so I've only included a few templates that I thought would be useful
+to me. If you have a template that you think would be useful to others, please
+open a new issue, or submit a pull request!

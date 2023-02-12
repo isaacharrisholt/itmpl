@@ -1,6 +1,6 @@
-site_name: {{ project_title }} Documentation
-site_url: {{ site_url }}/
-copyright: Copyright &copy; {{ current_year }} {{ author_name }}
+site_name: Itmpl Documentation
+site_url: https://isaacharrisholt.github.io/itmpl/
+copyright: Copyright &copy; 2023 Isaac Harris-Holt
 
 nav:
   - Overview: index.md

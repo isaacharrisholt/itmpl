@@ -1,7 +1,7 @@
 import json
 import subprocess
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import typer
 import yaml
@@ -10,8 +10,8 @@ import yaml
 def get_variables(
     project_name: str,
     destination: Path,
-    variables: Dict[str, str],
-) -> Dict[str, str]:
+    variables: Dict[str, Any],
+) -> Dict[str, Any]:
     project_description = typer.prompt("Project description")
     project_author = typer.prompt("Project author")
     project_license = typer.prompt("Project license", default="MIT")
@@ -106,8 +106,8 @@ def _get_pre_commit_config_package_versions(directory: Path) -> Dict[str, str]:
 def post_script(
     project_name: str,
     final_directory: Path,
-    variables: Dict[str, str],
-) -> Optional[Dict[str, str]]:
+    variables: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
     # Get pip path
     pip_path = subprocess.run(
         ["which", "pip"],

@@ -1,22 +1,4 @@
-import tempfile
-from pathlib import Path
-
-import pytest
-
 from itmpl import tree_utils
-
-
-@pytest.fixture
-def tempdir():
-    """Create a temporary directory for the test to use."""
-    with tempfile.TemporaryDirectory() as tempdir:
-        path = Path(tempdir)
-        source = path / "source"
-        destination = path / "destination"
-        source.mkdir()
-        destination.mkdir()
-
-        yield path, source, destination
 
 
 def test_find_duplicates_in_root(tempdir):

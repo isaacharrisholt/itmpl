@@ -6,12 +6,9 @@ from typing import Any, Dict, Optional, Tuple
 
 import jinja2
 import typer
+from itmpl import config, global_vars, metadata, tree_utils, utils
 from pydantic import ValidationError
 from rich import print
-
-from itmpl import config, global_vars, metadata, tree_utils, utils
-
-ITMPL_MODULE: Optional[ModuleType] = None
 
 
 class DuplicateTemplateError(Exception):
@@ -72,19 +69,15 @@ def get_template_options() -> Dict[str, Tuple[Path, str]]:
 
 def _setup_itmpl_module(directory: Path) -> Optional[ModuleType]:
     """Import the .itmpl.py file in the template directory."""
-    global ITMPL_MODULE
-
-    if ITMPL_MODULE is not None:
-        return ITMPL_MODULE
-
     itmpl_file = directory / ".itmpl.py"
 
     if not itmpl_file.exists():
         return None
 
-    ITMPL_MODULE = utils.import_external_module(itmpl_file)
-
-    return ITMPL_MODULE
+    try:
+        return utils.import_external_module(itmpl_file)
+    except Exception as e:
+        raise TemplatingException(f"Error when importing .itmpl.py: {e}") from e
 
 
 def get_default_variables(project_name: str) -> Dict[str, Any]:

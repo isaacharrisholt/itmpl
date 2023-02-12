@@ -1,0 +1,6 @@
+[metadata]
+template_description = "Test template complete"
+
+[variables]
+a = 1
+b = 2

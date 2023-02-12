@@ -1,31 +1,9 @@
-import json
 from pathlib import Path
 
-import pytest
+from itmpl import config, global_vars
 from typer.testing import CliRunner
 
-from itmpl import config, global_vars
-
 runner = CliRunner()
-
-
-@pytest.fixture
-def mock_config_file(monkeypatch):
-    path = Path(__file__).parent / "files" / "config.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.touch()
-
-    with path.open("w") as f:
-        json.dump({"extra_templates_dir": "/tmp/templates"}, f)
-
-    monkeypatch.setattr(
-        config,
-        "CONFIG_PATH",
-        path,
-    )
-
-    yield path
-    path.unlink()
 
 
 def test_read_config_no_config(monkeypatch):

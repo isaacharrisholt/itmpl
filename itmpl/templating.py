@@ -6,9 +6,10 @@ from typing import Any, Dict, Optional, Tuple
 
 import jinja2
 import typer
-from itmpl import config, global_vars, metadata, tree_utils, utils
 from pydantic import ValidationError
 from rich import print
+
+from itmpl import config, global_vars, metadata, tree_utils, utils
 
 
 class DuplicateTemplateError(Exception):

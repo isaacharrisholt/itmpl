@@ -1,7 +1,8 @@
 from pathlib import Path
 
-from itmpl import config, global_vars
 from typer.testing import CliRunner
+
+from itmpl import config, global_vars
 
 runner = CliRunner()
 

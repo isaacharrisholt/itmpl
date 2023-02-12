@@ -2,6 +2,7 @@ import shutil
 from pathlib import Path
 
 import pytest
+
 from itmpl import global_vars, templating
 
 

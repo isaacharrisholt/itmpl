@@ -5,7 +5,7 @@ try:
     import tomli
 except ImportError:
     # Python 3.11
-    import tomllib as tomli
+    import tomllib as tomli  # type: ignore
 
 from pydantic import BaseModel
 

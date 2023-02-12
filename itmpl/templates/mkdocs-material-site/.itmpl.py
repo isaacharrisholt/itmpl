@@ -59,9 +59,9 @@ def _add_dependencies_poetry(
     print("done!")
 
     # Install dependencies
-    print("Installing Poetry dependencies...", end=" ", flush=True)
+    print("Installing Poetry dev dependencies...", end=" ", flush=True)
     subprocess.run(
-        ["poetry", "install"],
+        ["poetry", "install", "-G", "dev"],
         cwd=final_directory,
         check=True,
         stdout=subprocess.DEVNULL,

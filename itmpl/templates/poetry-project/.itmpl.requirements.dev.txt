@@ -2,13 +2,6 @@ black
 isort
 ruff
 pyright
-mkdocs
-mkdocs-material
-mkdocs-minify-plugin
-mkdocstrings
-mkdocs-gen-files
-mkdocs-section-index
-mkdocs-literate-nav
 pre-commit
 pytest
 tox

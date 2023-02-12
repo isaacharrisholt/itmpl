@@ -1,0 +1,9 @@
+mkdocs
+mkdocstrings
+mkdocs-gen-files
+mkdocs-glightbox
+mkdocs-include-dir-to-nav
+mkdocs-literate-nav
+mkdocs-material
+mkdocs-minify-plugin
+mkdocs-section-index

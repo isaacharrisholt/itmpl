@@ -1,0 +1,19 @@
+[data-md-color-scheme="light"] {
+    --md-default-bg-color: #FFFFFF;
+
+    --md-primary-fg-color: #{{ light_mode_primary_colour }};
+
+    --md-typeset-color: #0D0D0D;
+    --md-typeset-a-color: #6aaae7;
+}
+
+/*
+Here we overwrite some of the properties of the default 'slate' scheme as it
+generally works great as a dark theme and is hue-based.
+*/
+[data-md-color-scheme="slate"] {
+    --md-primary-fg-color: #{{ dark_mode_primary_colour }};
+    --md-hue: 12;
+    --md-typeset-a-color: #6aaae7;
+}
+

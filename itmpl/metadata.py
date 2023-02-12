@@ -1,7 +1,12 @@
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-import tomli
+try:
+    import tomli
+except ImportError:
+    # Python 3.11
+    import tomllib as tomli
+
 from pydantic import BaseModel
 
 

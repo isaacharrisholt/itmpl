@@ -4,7 +4,7 @@ from pathlib import Path
 
 import mkdocs_gen_files
 
-nav = mkdocs_gen_files.Nav()
+nav = mkdocs_gen_files.Nav()  # type: ignore
 
 for path in sorted(Path("{{ project_name }}").rglob("*.py")):
     module_path = path.relative_to("{{ project_name }}").with_suffix("")

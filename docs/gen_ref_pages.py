@@ -5,7 +5,7 @@ from pathlib import Path
 import mkdocs_gen_files
 
 IGNORE_PATHS = list((Path(__file__).parent.parent / "itmpl" / "templates").rglob("*"))
-nav = mkdocs_gen_files.Nav()
+nav = mkdocs_gen_files.Nav()  # type: ignore
 
 
 for path in sorted(Path("itmpl").rglob("*.py")):

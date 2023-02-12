@@ -1,9 +1,12 @@
-site_name: Itmpl Documentation
+site_name: iTmpl
 site_url: https://isaacharrisholt.github.io/itmpl/
+repo_name: isaacharrisholt/itmpl
+repo_url: https://github.com/isaacharrisholt/itmpl
 copyright: Copyright &copy; 2023 Isaac Harris-Holt
 
 nav:
-  - Overview: index.md
+  - iTmpl: index.md
+  - Using Custom Templates: ./using_custom_templates.md
   - API Reference: ./reference/
 
 theme:
@@ -11,6 +14,7 @@ theme:
   favicon: static/images/favicon.ico
   icon:
     logo: material/hammer-wrench
+    repo: fontawesome/brands/github
   palette:
     - scheme: light
       toggle:
@@ -29,6 +33,7 @@ theme:
     - navigation.tabs.sticky
     - navigation.top  # Back to top button
     - search.suggest
+    - content.code.annotate
 
 extra:
   generator: false  # Turn off the 'Made with Material for MkDocs' notice

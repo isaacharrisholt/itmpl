@@ -77,7 +77,7 @@ show it in the list of available templates.
 
 Templates can be configured through `.itmpl.toml` and `.itmpl.py` files. See
 the
-[documentation](https://isaacharrisholt.github.io/itmpl/adding_new_templates)
+[documentation](https://isaacharrisholt.github.io/itmpl/using_custom_templates)
 for more details.
 
 ## Contributing

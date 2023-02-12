@@ -18,7 +18,10 @@ def import_external_module(module_path: Path) -> ModuleType:
     if spec.loader is None:
         raise ValueError(f"No loader found for module: {module_path}")
 
-    spec.loader.exec_module(module)
+    try:
+        spec.loader.exec_module(module)
+    except FileNotFoundError:
+        raise ValueError(f"No module found at path: {module_path}")
 
     return module
 

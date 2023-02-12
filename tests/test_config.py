@@ -12,6 +12,7 @@ runner = CliRunner()
 @pytest.fixture
 def mock_config_file(monkeypatch):
     path = Path(__file__).parent / "files" / "config.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.touch()
 
     with path.open("w") as f:

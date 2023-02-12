@@ -45,6 +45,7 @@ def new(
         raise typer.Exit(1)
 
     # Allow the user to template in this directory
+    path = path.resolve()
     if path.name == name:
         path = path.parent
 

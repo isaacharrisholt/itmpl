@@ -10,8 +10,8 @@ app = Typer()
 app.add_typer(config.app, name="config")
 
 
-@app.command()
-def ls():
+@app.command("list")
+def list_():
     """List all available templates."""
     print(
         utils.construct_table_from_templates(
@@ -24,10 +24,33 @@ def ls():
 def new(
     template: str,
     name: str,
-    path: Path = Path("."),
-    force: bool = typer.Option(False, "--force", "-f"),
+    path: Path = typer.Option(
+        Path("."),
+        "--path",
+        "-p",
+        exists=True,
+        help="The path to create the project in.",
+    ),
+    force: bool = typer.Option(
+        False,
+        "--force",
+        "-f",
+        help="Overwrite any files that already exist without prompting.",
+    ),
 ):
-    """Create a new project from a template."""
+    """Create a new project from a template.
+
+    Parameters
+    ----------
+    template
+        The name of the template to use.
+    name
+        The name of the project to create.
+    path
+        The path to create the project in.
+    force
+        If True, overwrite any files that already exist without prompting.
+    """
     try:
         template_options = templating.get_template_options()
     except templating.DuplicateTemplateError as e:

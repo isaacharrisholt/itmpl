@@ -35,8 +35,19 @@ def write_config(config: Config):
         f.write(config.json())
 
 
-@app.command()
-def set(
+@app.command("show")
+def show(option: ConfigOption = typer.Argument(None)):  # type: ignore
+    """Show the current configuration."""
+    config = read_config()
+    if option:
+        print(config.__getattribute__(option.value))
+        return
+
+    print(config.json(indent=4))
+
+
+@app.command("set")
+def set_(
     option: ConfigOption,  # type: ignore
     value: str,
 ):
@@ -64,6 +75,16 @@ def set(
     write_config(config)
 
     print(f"Set [green]{option.value}[/green] to [green]{new}[/green]")
+
+
+@app.command()
+def get(option: ConfigOption):  # type: ignore
+    """Get a configuration option."""
+    config = read_config()
+    print(
+        f"[green]{option.value}[/green] is set to "
+        f"[green]{config.__getattribute__(option.value)}[/green]"
+    )
 
 
 @app.command()

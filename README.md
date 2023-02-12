@@ -1,4 +1,4 @@
-![iTmpl Logo](./docs/static/images/itmpl-logo.png)
+![iTmpl Logo](https://isaacharrisholt.github.io/itmpl/static/images/itmpl-logo.png)
 
 <p align="center">
     <em>iTmpl. A flexible, powerful project templating tool, written in Python.</em>

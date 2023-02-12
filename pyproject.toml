@@ -5,6 +5,9 @@ description = "A project templating and scaffolding tool"
 authors = ["Isaac Harris-Holt <isaac@harris-holt.com>"]
 license = "GPL-3.0-or-later"
 readme = "README.md"
+homepage = "https://itmpl.ihh.dev"
+repository = "https://github.com/isaacharrisholt/itmpl"
+documentation = "https://itmpl.ihh.dev"
 exclude = [
     "**/.ruff_cache",
     "**/__pycache__",

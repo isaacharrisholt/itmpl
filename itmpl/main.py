@@ -42,13 +42,13 @@ def new(
 
     Parameters
     ----------
-    template
+    template : str
         The name of the template to use.
-    name
+    name : str
         The name of the project to create.
-    path
+    path : Path
         The path to create the project in.
-    force
+    force : bool
         If True, overwrite any files that already exist without prompting.
     """
     try:
@@ -90,6 +90,8 @@ def new(
 
 @app.callback()
 def create_directories():
+    """Create directories used by iTmpl. This is called automatically when iTmpl is
+    run."""
     global_vars.APP_DIR.mkdir(parents=True, exist_ok=True)
     global_vars.TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
     c = config.read_config()

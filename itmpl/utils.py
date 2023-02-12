@@ -27,7 +27,7 @@ def import_external_module(module_path: Path) -> ModuleType:
 
 
 def construct_table_from_templates(templates: Iterable[Tuple[Path, str]]) -> Table:
-    """Construct a rich table from a list of templates."""
+    """Construct a Rich table from a list of templates."""
     table = Table(show_header=True, header_style="bold")
     table.add_column("Template", justify="left", no_wrap=True, header_style="blue")
     table.add_column("Description")

@@ -16,7 +16,7 @@ CONFIG_PATH = APP_DIR / "config.json"
 
 
 class Config(BaseModel):
-    """Configuration for itmpl."""
+    """Configuration for iTmpl."""
 
     extra_templates_dir: Path = APP_DIR / "templates"
 

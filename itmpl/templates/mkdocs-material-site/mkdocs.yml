@@ -49,7 +49,14 @@ plugins:
   - gen-files:
       scripts:
         - docs/gen_ref_pages.py
-  - mkdocstrings
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - {{ project_name }}
+          options:
+            docstring_style: numpy
+            separate_signature: true
   - section-index
   - include_dir_to_nav:
       recurse: true

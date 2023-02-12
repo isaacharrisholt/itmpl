@@ -51,7 +51,7 @@ def copy_tree(
             shutil.copy2(item, destination / item.name)
 
 
-def reursive_delete(directory: Path, glob: str) -> None:
+def recursive_delete(directory: Path, glob: str) -> None:
     """Delete all files in a directory matching a glob."""
     for file in directory.rglob(glob):
         if file.is_file():

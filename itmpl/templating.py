@@ -263,5 +263,5 @@ def render_template(
                     f"Error when templating directory: {e}"
                 ) from e
 
-        tree_utils.reursive_delete(destination, ".itmpl*")
-        tree_utils.reursive_delete(destination, "__pycache__")
+        tree_utils.recursive_delete(destination, ".itmpl*")
+        tree_utils.recursive_delete(destination, "__pycache__")

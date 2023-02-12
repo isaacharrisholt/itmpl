@@ -1,6 +1,9 @@
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+# Variable for testing the template_directory function ignores .itmpl* files:
+# {{ project_name }}
+
 
 def get_variables(
     project_name: str,

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from itmpl import global_vars, templating
+from itmpl import global_vars, templating, tree_utils
 
 
 def test_get_templates_in_dir(template_dirs):
@@ -172,3 +172,86 @@ def test_get_python_variables_exception(template_dirs):
             destination,
             {"c": 3},
         )
+
+
+def test_template_directory_files_in_root(template_dirs):
+    """Test the template_directory function successfully templates files in the roof of
+    the directory."""
+    source, destination = template_dirs
+
+    tree_utils.copy_tree(source / "test-template-complete", destination)
+    templating.template_directory(
+        destination,
+        {
+            **templating.get_default_variables("test-project"),
+            "project_description": "Test project description",
+        },
+    )
+
+    template_file_path = destination / "{{ project_name }}.txt"
+    test_file_path = destination / "test-project.txt"
+    assert not template_file_path.exists()
+    assert test_file_path.exists()
+    assert test_file_path.is_file()
+    assert test_file_path.read_text() == "Test Project\n\nTest project description\n"
+
+
+def test_template_directory_directory_names(template_dirs):
+    """Test the template_directory function successfully templates directory names."""
+    source, destination = template_dirs
+
+    tree_utils.copy_tree(source / "test-template-complete", destination)
+    templating.template_directory(
+        destination,
+        {
+            **templating.get_default_variables("test-project"),
+            "project_description": "Test project description",
+        },
+    )
+
+    template_directory_path = destination / "{{ project_title }}"
+    test_directory_path = destination / "Test Project"
+    assert not template_directory_path.exists()
+    assert test_directory_path.exists()
+    assert test_directory_path.is_dir()
+    assert (test_directory_path / "test.txt").exists()
+
+
+def test_template_directory_files_in_subdirectories(template_dirs):
+    """Test the template_directory function successfully templates files in
+    subdirectories."""
+    source, destination = template_dirs
+
+    tree_utils.copy_tree(source / "test-template-complete", destination)
+    templating.template_directory(
+        destination,
+        {
+            **templating.get_default_variables("test-project"),
+            "project_description": "Test project description",
+        },
+    )
+    template_json_file_path = (
+        destination / "{{ project_title }}" / "{{ project_description }}.json"
+    )
+    test_json_file_path = destination / "Test Project" / "Test project description.json"
+    assert not template_json_file_path.exists()
+    assert test_json_file_path.exists()
+    assert test_json_file_path.is_file()
+
+
+def test_template_directory_ignores_itmpl_files(template_dirs):
+    """Test the template_directory function ignores files starting with .itmpl."""
+    source, destination = template_dirs
+
+    tree_utils.copy_tree(source / "test-template-complete", destination)
+    templating.template_directory(
+        destination,
+        {
+            **templating.get_default_variables("test-project"),
+            "project_description": "Test project description",
+        },
+    )
+
+    itmpl_metadata_path = destination / ".itmpl.py"
+    assert itmpl_metadata_path.exists()
+    assert "{{ project_name }}" in itmpl_metadata_path.read_text()

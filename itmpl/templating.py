@@ -165,6 +165,10 @@ def template_directory(
         for file in files:
             file_path = root / file
 
+            # Ignore .itmpl files
+            if file_path.name.startswith(".itmpl"):
+                continue
+
             # Template the file's contents
             try:
                 contents_template = jinja2.Template(
@@ -172,6 +176,7 @@ def template_directory(
                     undefined=(
                         IgnoreUndefined if ignore_undefined else jinja2.StrictUndefined
                     ),
+                    keep_trailing_newline=True,
                 )
             except UnicodeDecodeError:
                 # Not a unicode file, so skip it

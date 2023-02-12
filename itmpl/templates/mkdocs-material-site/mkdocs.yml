@@ -1,0 +1,65 @@
+site_name: {{ project_title }} Documentation
+site_url: {{ site_url }}/
+copyright: Copyright &copy; {{ current_year }} {{ author_name }}
+
+nav:
+  - Overview: index.md
+  - API Reference: ./reference/
+
+theme:
+  name: material
+  favicon: static/images/favicon.ico
+  icon:
+    logo: material/hammer-wrench
+  palette:
+    - scheme: light
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+      media: "(prefers-color-scheme: light)"
+    - scheme: slate
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode, you heathen
+      media: "(prefers-color-scheme: dark)"
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top  # Back to top button
+    - search.suggest
+
+extra:
+  generator: false  # Turn off the 'Made with Material for MkDocs' notice
+
+extra_css:
+  - stylesheets/schemes.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+plugins:
+  - search:
+      lang: en
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - {{ project_name }}
+          options:
+            docstring_style: numpy
+            separate_signature: true
+  - section-index
+  - include_dir_to_nav:
+      recurse: true
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - glightbox

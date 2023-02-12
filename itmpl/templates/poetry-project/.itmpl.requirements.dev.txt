@@ -1,0 +1,7 @@
+black
+isort
+ruff
+pyright
+pre-commit
+pytest
+tox

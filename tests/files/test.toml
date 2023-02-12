@@ -1,0 +1,6 @@
+[metadata]
+template_description = "Some description"
+
+[variables]
+a = 1
+b = 2

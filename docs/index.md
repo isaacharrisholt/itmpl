@@ -1,4 +1,4 @@
-![iTmpl Logo](./docs/static/images/itmpl-logo.png)
+![iTmpl Logo](./static/images/itmpl-logo.png)
 
 <p align="center">
     <em>iTmpl. A flexible, powerful project templating tool, written in Python.</em>
@@ -76,9 +76,7 @@ To create a new template, simple create a new directory in the
 show it in the list of available templates.
 
 Templates can be configured through `.itmpl.toml` and `.itmpl.py` files. See
-the
-[documentation](https://isaacharrisholt.github.io/itmpl/using_custom_templates)
-for more details.
+the [documentation](./using_custom_templates.md) for more details.
 
 ## Contributing
 

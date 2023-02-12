@@ -1,0 +1,4 @@
+[metadata]
+template_description = """\
+    Generate a new Material for MkDocs site with some pre-installed plugins.\
+    """

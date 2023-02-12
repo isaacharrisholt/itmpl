@@ -1,0 +1,71 @@
+site_name: iTmpl
+site_url: https://isaacharrisholt.github.io/itmpl/
+repo_name: isaacharrisholt/itmpl
+repo_url: https://github.com/isaacharrisholt/itmpl
+copyright: Copyright &copy; 2023 Isaac Harris-Holt
+
+nav:
+  - iTmpl: index.md
+  - Using Custom Templates: ./using_custom_templates.md
+  - API Reference: ./reference/
+
+theme:
+  name: material
+  favicon: static/images/favicon.ico
+  icon:
+    logo: material/hammer-wrench
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: light
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+      media: "(prefers-color-scheme: light)"
+    - scheme: slate
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode, you heathen
+      media: "(prefers-color-scheme: dark)"
+  features:
+    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top  # Back to top button
+    - search.suggest
+    - content.code.annotate
+
+extra:
+  generator: false  # Turn off the 'Made with Material for MkDocs' notice
+
+extra_css:
+  - stylesheets/schemes.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+plugins:
+  - search:
+      lang: en
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - mkdocstrings:
+      handlers:
+        python:
+          paths:
+            - itmpl
+          options:
+            docstring_style: numpy
+            separate_signature: true
+            members_order: source
+  - section-index
+  - include_dir_to_nav:
+      recurse: true
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - glightbox

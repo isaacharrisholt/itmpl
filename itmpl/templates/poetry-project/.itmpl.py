@@ -10,7 +10,7 @@ import yaml
 def get_variables(
     project_name: str,
     destination: Path,
-    default_variables: Dict[str, str],
+    variables: Dict[str, str],
 ) -> Dict[str, str]:
     project_description = typer.prompt("Project description")
     project_author = typer.prompt("Project author")

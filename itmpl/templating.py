@@ -2,15 +2,24 @@ import os
 import tempfile
 from pathlib import Path
 from types import ModuleType
-from typing import Dict, Optional
+from typing import Any, Dict, Optional, Tuple
 
 import jinja2
 import typer
+from pydantic import ValidationError
 from rich import print
 
-from itmpl import global_vars, tree_utils, utils
+from itmpl import config, global_vars, metadata, tree_utils, utils
 
 ITMPL_MODULE: Optional[ModuleType] = None
+
+
+class DuplicateTemplateError(Exception):
+    """Exception raised when there are duplicate templates."""
+
+    def __init__(self, duplicate_templates: Dict[str, Tuple[Path, str]]) -> None:
+        super().__init__()
+        self.duplicate_templates = duplicate_templates
 
 
 class IgnoreUndefined(jinja2.Undefined):
@@ -24,6 +33,41 @@ class IgnoreUndefined(jinja2.Undefined):
 
 class TemplatingException(Exception):
     """Exception raised when there is an error with the templating."""
+
+
+def get_templates_in_dir(directory: Path) -> Dict[str, Tuple[Path, str]]:
+    """Return a list of templates in a directory with their descriptions."""
+    templates = {}
+    for path in directory.iterdir():
+        if not path.is_dir():
+            continue
+
+        meta = metadata.read_itmpl_toml(path / ".itmpl.toml")
+        templates[path.name] = (path, meta.metadata.template_description)
+
+    return templates
+
+
+def get_template_options() -> Dict[str, Tuple[Path, str]]:
+    """Return a list of template options and their descriptions."""
+    c = config.read_config()
+    default_template_options = get_templates_in_dir(global_vars.TEMPLATES_DIR)
+    extra_template_options = get_templates_in_dir(c.extra_templates_dir)
+
+    # Find the intersection of the two sets of templates
+    duplicate_template_keys = (
+        default_template_options.keys() & extra_template_options.keys()
+    )
+    duplicate_templates = {
+        k: v
+        for k, v in default_template_options.items()
+        if k in duplicate_template_keys
+    }
+
+    if duplicate_templates:
+        raise DuplicateTemplateError(duplicate_templates)
+
+    return {**default_template_options, **extra_template_options}
 
 
 def _setup_itmpl_module(directory: Path) -> Optional[ModuleType]:
@@ -43,18 +87,30 @@ def _setup_itmpl_module(directory: Path) -> Optional[ModuleType]:
     return ITMPL_MODULE
 
 
-def get_default_variables(project_name: str) -> Dict[str, str]:
+def get_default_variables(project_name: str) -> Dict[str, Any]:
     return {
         "project_name": project_name,
         "project_title": project_name.replace("-", " ").replace("_", " ").title(),
     }
 
 
-def get_extra_variables(
+def get_toml_variables(temp_directory: Path) -> Dict[str, Any]:
+    """Get extra variables from the .itmpl.toml file in the template directory."""
+    try:
+        meta = metadata.read_itmpl_toml(temp_directory / ".itmpl.toml")
+    except ValidationError as e:
+        raise TemplatingException(f"Error when validating .itmpl.toml: {e}") from e
+    except Exception as e:
+        raise TemplatingException(f"Error when reading .itmpl.toml: {e}") from e
+
+    return meta.variables
+
+
+def get_python_variables(
     temp_directory: Path,
     project_name: str,
     destination: Path,
-    default_variables: Dict[str, str],
+    variables: Dict[str, Any],
 ) -> Dict[str, str]:
     """Get extra variables from the .itmpl.py file in the template directory."""
     module = _setup_itmpl_module(temp_directory)
@@ -64,9 +120,9 @@ def get_extra_variables(
 
     try:
         return module.get_variables(
-            project_name=project_name,
-            destination=destination,
-            default_variables=default_variables,
+            project_name,
+            destination,
+            variables,
         )
     except Exception as e:
         raise TemplatingException(
@@ -87,9 +143,9 @@ def run_post_script(
 
     try:
         return module.post_script(
-            project_name=project_name,
-            final_directory=final_directory,
-            variables=variables,
+            project_name,
+            final_directory,
+            variables,
         )
     except Exception as e:
         raise TemplatingException(
@@ -99,7 +155,7 @@ def run_post_script(
 
 def template_directory(
     dir_path: Path,
-    variables: Dict[str, str],
+    variables: Dict[str, Any],
     ignore_undefined: bool = False,
 ) -> None:
     """Template the contents of a directory using Jinja. Both file contents and
@@ -163,14 +219,15 @@ def render_template(
             temp_project_dir,
         )
 
-        extra_variables = get_extra_variables(
+        toml_variables = get_toml_variables(temp_project_dir)
+        python_variables = get_python_variables(
             temp_directory=temp_project_dir,
             project_name=project_name,
             destination=destination,
-            default_variables=default_variables.copy(),
+            variables={**default_variables, **toml_variables},
         )
 
-        variables = {**default_variables, **extra_variables}
+        variables = {**default_variables, **toml_variables, **python_variables}
         template_directory(temp_project_dir, variables, ignore_undefined=True)
 
         duplicates = list(

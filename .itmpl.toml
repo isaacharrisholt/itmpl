@@ -1,0 +1,6 @@
+[metadata]
+description = "A simple example of a template"
+
+[variables]
+name = "The name of the person to greet"
+age = 13

@@ -4,10 +4,20 @@ import typer
 from rich import print
 from typer import Typer
 
-from itmpl import config, global_vars, templating
+from itmpl import config, global_vars, templating, utils
 
 app = Typer()
 app.add_typer(config.app, name="config")
+
+
+@app.command()
+def ls():
+    """List all available templates."""
+    print(
+        utils.construct_table_from_templates(
+            templating.get_template_options().values(),
+        ),
+    )
 
 
 @app.command()
@@ -17,29 +27,21 @@ def new(
     path: Path = Path("."),
     force: bool = typer.Option(False, "--force", "-f"),
 ):
-    c = config.read_config()
-    default_template_options = {
-        t.name for t in global_vars.TEMPLATES_DIR.iterdir() if t.is_dir()
-    }
-    extra_template_options = {
-        t.name for t in c.extra_templates_dir.iterdir() if t.is_dir()
-    }
-
-    duplicate_templates = default_template_options.intersection(extra_template_options)
-    if duplicate_templates:
+    """Create a new project from a template."""
+    try:
+        template_options = templating.get_template_options()
+    except templating.DuplicateTemplateError as e:
         print("[red]Duplicate templates found:[/red]")
-        print("\n".join(duplicate_templates))
+        print(utils.construct_table_from_templates(e.duplicate_templates.values()))
         print("[red]Please remove the duplicates and try again.[/red]")
         raise typer.Exit(1)
-
-    template_options = default_template_options.union(extra_template_options)
 
     if template not in template_options:
         print(
             f"[red]Template [white]{template}[/white] not found. "
             f"Available templates:[/red]"
         )
-        print("\n".join(template_options))
+        print(utils.construct_table_from_templates(template_options.values()))
         raise typer.Exit(1)
 
     # Allow the user to template in this directory

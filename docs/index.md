@@ -6,9 +6,9 @@
 
 ---
 
-**Documentation:** https://isaacharrisholt.github.io/itmpl
+**Documentation:** <https://itmpl.ihh.dev>
 
-**Source:** https://github.com/isaacharrisholt/itmpl
+**Source:** <https://github.com/isaacharrisholt/itmpl>
 
 ---
 

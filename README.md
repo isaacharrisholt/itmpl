@@ -6,9 +6,9 @@
 
 ---
 
-**Documentation:** https://isaacharrisholt.github.io/itmpl
+**Documentation:** <https://itmpl.ihh.dev>
 
-**Source:** https://github.com/isaacharrisholt/itmpl
+**Source:** <https://github.com/isaacharrisholt/itmpl>
 
 ---
 
@@ -77,7 +77,7 @@ show it in the list of available templates.
 
 Templates can be configured through `.itmpl.toml` and `.itmpl.py` files. See
 the
-[documentation](https://isaacharrisholt.github.io/itmpl/using_custom_templates)
+[documentation](https://itmpl.ihh.dev/using_custom_templates)
 for more details.
 
 ## Contributing

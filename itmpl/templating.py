@@ -204,6 +204,7 @@ def render_template(
     project_name: str,
     template: str,
     destination: Path,
+    template_path: Path,
     prompt_if_duplicates: bool = True,
 ):
     default_variables = {
@@ -214,7 +215,7 @@ def render_template(
     with tempfile.TemporaryDirectory() as tempdir:
         temp_project_dir = Path(tempdir) / template
         tree_utils.copy_tree(
-            global_vars.TEMPLATES_DIR / template,
+            template_path,
             temp_project_dir,
         )
 

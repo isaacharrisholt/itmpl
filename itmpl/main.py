@@ -74,11 +74,14 @@ def new(
 
     destination = path / name
 
+    template_path = template_options[template][0]
+
     try:
         templating.render_template(
             project_name=name,
             template=template,
             destination=destination,
+            template_path=template_path,
             prompt_if_duplicates=not force,
         )
     except templating.TemplatingException as e:

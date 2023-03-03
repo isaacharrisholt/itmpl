@@ -1,4 +1,6 @@
 import importlib.util
+import subprocess
+import sys
 from pathlib import Path
 from types import ModuleType
 from typing import Iterable, List, Tuple
@@ -39,3 +41,10 @@ def construct_table_from_templates(
         table.add_row(template[0].name, template[1], ", ".join(template[2]))
 
     return table
+
+
+def install_dependencies(dependencies: List[str]):
+    """Install dependencies."""
+    subprocess.check_call(
+        [sys.executable, "-m", "pip", "install", *dependencies],
+    )

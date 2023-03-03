@@ -44,6 +44,9 @@ To see available project templates, run:
 itmpl list
 ```
 
+If the template you'd like to use has dependencies, run `itmpl deps <template>`
+to install them to the environment iTmpl is running in.
+
 To create a new project from a template, run:
 
 ```bash

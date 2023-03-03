@@ -116,6 +116,7 @@ variables for the template. The following is an example `.itmpl.toml` file:
 ```toml
 [metadata]
 template_description = "A template for creating a Python package with Poetry."
+template_requirements = ["poetry", "pyyaml"]
 
 [variables]
 author = "Isaac Harris-Holt"
@@ -127,9 +128,10 @@ website = "https://itmpl.ihh.dev/"
 The `metadata` table is used to store metadata about the template. The
 following metadata fields are available:
 
-| Field Name             | Description                                                                                         |
-|------------------------|-----------------------------------------------------------------------------------------------------|
-| `template_description` | A description of the template. This is used in `itmpl list` to display the purpose of the template. |
+| Field Name              | Description                                                                                                                                          |
+|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `template_description`  | A description of the template. This is used in `itmpl list` to display the purpose of the template.                                                  |
+| `template_requirements` | A list of requirements for the template. This is used in `itmpl list` to display the requirements, and `itmpl deps` to install project dependencies. |
 
 ### Variables
 

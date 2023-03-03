@@ -1,5 +1,6 @@
 import json
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -108,14 +109,6 @@ def post_script(
     final_directory: Path,
     variables: Dict[str, Any],
 ) -> Optional[Dict[str, Any]]:
-    # Get pip path
-    pip_path = subprocess.run(
-        ["which", "pip"],
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.strip()
-
     # Deactivate virtual environment
     try:
         subprocess.run(["deactivate"], check=False)
@@ -129,7 +122,7 @@ def post_script(
         # Install poetry
         print("Poetry is not installed, installing Poetry...", end=" ", flush=True)
         subprocess.run(
-            [pip_path, "install", "poetry"],
+            [sys.executable, "-m", "pip", "install", "poetry"],
             check=True,
             stdout=subprocess.DEVNULL,
         )

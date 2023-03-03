@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -71,13 +72,14 @@ def _add_dependencies_poetry(
 
 def _add_dependencies_requirements(
     dependencies: List[str],
-    pip_path: str,
     final_directory: Path,
 ) -> None:
     print("Adding dependencies...", end=" ", flush=True)
     subprocess.run(
         [
-            pip_path,
+            sys.executable,
+            "-m",
+            "pip",
             "install",
             *dependencies,
         ],
@@ -93,7 +95,9 @@ def _add_dependencies_requirements(
 
     if docs_requirements_file.exists():
         print(
-            "Adding dev dependencies to requirements.docs.txt...", end=" ", flush=True
+            "Adding dev dependencies to requirements.docs.txt...",
+            end=" ",
+            flush=True,
         )
         with dev_requirements_file.open("a") as f:
             f.write("\n".join(dependencies))
@@ -119,13 +123,6 @@ def post_script(
     variables: Dict[str, Any],
 ) -> Optional[Dict[str, Any]]:
     # Get pip path
-    pip_path = subprocess.run(
-        ["which", "pip"],
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.strip()
-
     dependency_method = typer.prompt(
         "How would you like to add dependencies? [pip, poetry, none]",
         type=DependencyManager,
@@ -138,14 +135,7 @@ def post_script(
     if dependency_method == DependencyManager.POETRY:
         _add_dependencies_poetry(dependencies, final_directory)
     elif dependency_method == DependencyManager.PIP:
-        # Get pip path
-        pip_path = subprocess.run(
-            ["which", "pip"],
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout.strip()
-        _add_dependencies_requirements(dependencies, pip_path, final_directory)
+        _add_dependencies_requirements(dependencies, final_directory)
     elif dependency_method == DependencyManager.NONE:
         print(
             "Skipping dependency installation...\n"

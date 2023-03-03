@@ -67,13 +67,14 @@ def _add_dependencies(final_directory: Path) -> None:
     print("done!")
 
 
-def _get_package_versions(package_names: List[str]) -> Dict[str, str]:
+def _get_package_versions(package_names: List[str], cwd: Path) -> Dict[str, str]:
     """Get installed package versions."""
     installed_packages_json = subprocess.run(
         ["poetry", "run", "pip", "list", "--format=json"],
         capture_output=True,
         text=True,
         check=True,
+        cwd=cwd,
     ).stdout
 
     installed_packages = json.loads(installed_packages_json)
@@ -101,7 +102,7 @@ def _get_pre_commit_config_package_versions(directory: Path) -> Dict[str, str]:
         for hook in repo["hooks"]:
             package_names.append(hook["name"])
 
-    return _get_package_versions(package_names)
+    return _get_package_versions(package_names, directory)
 
 
 def post_script(

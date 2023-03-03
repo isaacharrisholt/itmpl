@@ -2,7 +2,7 @@ import os
 import tempfile
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import jinja2
 import typer
@@ -15,7 +15,10 @@ from itmpl import config, global_vars, metadata, tree_utils, utils
 class DuplicateTemplateError(Exception):
     """Exception raised when there are duplicate templates."""
 
-    def __init__(self, duplicate_templates: Dict[str, Tuple[Path, str]]) -> None:
+    def __init__(
+        self,
+        duplicate_templates: Dict[str, Tuple[Path, str, List[str]]],
+    ) -> None:
         super().__init__()
         self.duplicate_templates = duplicate_templates
 
@@ -33,7 +36,7 @@ class TemplatingException(Exception):
     """Exception raised when there is an error with the templating."""
 
 
-def get_templates_in_dir(directory: Path) -> Dict[str, Tuple[Path, str]]:
+def get_templates_in_dir(directory: Path) -> Dict[str, Tuple[Path, str, List[str]]]:
     """Return a list of templates in a directory with their descriptions."""
     templates = {}
     for path in directory.iterdir():
@@ -41,12 +44,16 @@ def get_templates_in_dir(directory: Path) -> Dict[str, Tuple[Path, str]]:
             continue
 
         meta = metadata.read_itmpl_toml(path / ".itmpl.toml")
-        templates[path.name] = (path, meta.metadata.template_description)
+        templates[path.name] = (
+            path,
+            meta.metadata.template_description,
+            meta.metadata.template_requirements,
+        )
 
     return templates
 
 
-def get_template_options() -> Dict[str, Tuple[Path, str]]:
+def get_template_options() -> Dict[str, Tuple[Path, str, List[str]]]:
     """Return a list of template options and their descriptions."""
     c = config.read_config()
     default_template_options = get_templates_in_dir(global_vars.TEMPLATES_DIR)

@@ -1,7 +1,7 @@
 import importlib.util
 from pathlib import Path
 from types import ModuleType
-from typing import Iterable, Tuple
+from typing import Iterable, List, Tuple
 
 from rich.table import Table
 
@@ -26,13 +26,16 @@ def import_external_module(module_path: Path) -> ModuleType:
     return module
 
 
-def construct_table_from_templates(templates: Iterable[Tuple[Path, str]]) -> Table:
+def construct_table_from_templates(
+    templates: Iterable[Tuple[Path, str, List[str]]],
+) -> Table:
     """Construct a Rich table from a list of templates."""
     table = Table(show_header=True, header_style="bold")
     table.add_column("Template", justify="left", no_wrap=True, header_style="blue")
     table.add_column("Description")
+    table.add_column("Requirements")
 
     for template in templates:
-        table.add_row(template[0].name, template[1])
+        table.add_row(template[0].name, template[1], ", ".join(template[2]))
 
     return table

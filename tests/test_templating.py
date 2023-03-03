@@ -15,10 +15,11 @@ def test_get_templates_in_dir(template_dirs):
         "test-template-complete": (
             source / "test-template-complete",
             "Test template complete",
+            [],
         ),
-        "test-template-empty-files": (source / "test-template-empty-files", None),
-        "test-template-no-files": (source / "test-template-no-files", None),
-        "test-template-exceptions": (source / "test-template-exceptions", None),
+        "test-template-empty-files": (source / "test-template-empty-files", None, []),
+        "test-template-no-files": (source / "test-template-no-files", None, []),
+        "test-template-exceptions": (source / "test-template-exceptions", None, []),
     }
 
 
@@ -48,11 +49,12 @@ def test_get_template_options_no_duplicates(
         "test-template-complete": (
             source / "test-template-complete",
             "Test template complete",
+            [],
         ),
-        "test-template-empty-files": (source / "test-template-empty-files", None),
-        "test-template-no-files": (source / "test-template-no-files", None),
-        "test-template-exceptions": (source / "test-template-exceptions", None),
-        "test-template-temp": (temp_template_dir / "test-template-temp", None),
+        "test-template-empty-files": (source / "test-template-empty-files", None, []),
+        "test-template-no-files": (source / "test-template-no-files", None, []),
+        "test-template-exceptions": (source / "test-template-exceptions", None, []),
+        "test-template-temp": (temp_template_dir / "test-template-temp", None, []),
     }
 
     shutil.rmtree(temp_template_dir)

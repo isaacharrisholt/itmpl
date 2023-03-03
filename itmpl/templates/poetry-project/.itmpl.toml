@@ -3,3 +3,4 @@ template_description = """\
     Generate a new Poetry project with a basic directory structure and \
     tooling.\
     """
+template_requirements = ["poetry", "pyyaml"]

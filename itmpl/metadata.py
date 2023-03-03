@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 try:
     import tomli
@@ -14,6 +14,7 @@ class ItmplMetadata(BaseModel):
     """Metadata from the .itmpl.toml file."""
 
     template_description: Optional[str] = None
+    template_requirements: Optional[List[str]] = []
 
 
 class ItmplToml(BaseModel):

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "itmpl"
-version = "0.1.7"
+version = "0.1.8"
 description = "A project templating and scaffolding tool"
 authors = ["Isaac Harris-Holt <isaac@harris-holt.com>"]
 license = "GPL-3.0-or-later"

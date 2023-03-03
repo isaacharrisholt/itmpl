@@ -4,3 +4,4 @@ template_description = """\
     tooling.\
     """
 template_requirements = ["poetry", "pyyaml"]
+templating_excludes = ["**/.venv/**"]

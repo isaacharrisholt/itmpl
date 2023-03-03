@@ -14,7 +14,8 @@ class ItmplMetadata(BaseModel):
     """Metadata from the .itmpl.toml file."""
 
     template_description: Optional[str] = None
-    template_requirements: Optional[List[str]] = []
+    template_requirements: List[str] = []
+    templating_excludes: List[str] = []
 
 
 class ItmplToml(BaseModel):

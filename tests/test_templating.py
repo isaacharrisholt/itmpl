@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from itmpl import global_vars, templating, tree_utils
+from itmpl.metadata import ItmplMetadata, ItmplToml
 
 
 def test_get_templates_in_dir(template_dirs):
@@ -14,12 +15,48 @@ def test_get_templates_in_dir(template_dirs):
     assert templates == {
         "test-template-complete": (
             source / "test-template-complete",
-            "Test template complete",
-            [],
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description="Test template complete",
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={"a": 1, "b": 2},
+            ),
         ),
-        "test-template-empty-files": (source / "test-template-empty-files", None, []),
-        "test-template-no-files": (source / "test-template-no-files", None, []),
-        "test-template-exceptions": (source / "test-template-exceptions", None, []),
+        "test-template-empty-files": (
+            source / "test-template-empty-files",
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description=None,
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={},
+            ),
+        ),
+        "test-template-no-files": (
+            source / "test-template-no-files",
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description=None,
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={},
+            ),
+        ),
+        "test-template-exceptions": (
+            source / "test-template-exceptions",
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description=None,
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={},
+            ),
+        ),
     }
 
 
@@ -48,13 +85,59 @@ def test_get_template_options_no_duplicates(
     assert templates == {
         "test-template-complete": (
             source / "test-template-complete",
-            "Test template complete",
-            [],
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description="Test template complete",
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={"a": 1, "b": 2},
+            ),
         ),
-        "test-template-empty-files": (source / "test-template-empty-files", None, []),
-        "test-template-no-files": (source / "test-template-no-files", None, []),
-        "test-template-exceptions": (source / "test-template-exceptions", None, []),
-        "test-template-temp": (temp_template_dir / "test-template-temp", None, []),
+        "test-template-empty-files": (
+            source / "test-template-empty-files",
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description=None,
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={},
+            ),
+        ),
+        "test-template-no-files": (
+            source / "test-template-no-files",
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description=None,
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={},
+            ),
+        ),
+        "test-template-exceptions": (
+            source / "test-template-exceptions",
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description=None,
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={},
+            ),
+        ),
+        "test-template-temp": (
+            temp_template_dir / "test-template-temp",
+            ItmplToml(
+                metadata=ItmplMetadata(
+                    template_description=None,
+                    template_requirements=[],
+                    templating_excludes=[],
+                ),
+                variables={},
+            ),
+        ),
     }
 
     shutil.rmtree(temp_template_dir)
@@ -257,3 +340,24 @@ def test_template_directory_ignores_itmpl_files(template_dirs):
     itmpl_metadata_path = destination / ".itmpl.py"
     assert itmpl_metadata_path.exists()
     assert "{{ project_name }}" in itmpl_metadata_path.read_text()
+
+
+def test_template_directory_with_exclude_glob(template_dirs):
+    """Test the template_directory function successfully excludes files matching the
+    exclude glob."""
+    source, destination = template_dirs
+
+    tree_utils.copy_tree(source / "test-template-complete", destination)
+    templating.template_directory(
+        destination,
+        {
+            **templating.get_default_variables("test-project"),
+            "project_description": "Test project description",
+        },
+        exclude=["*.txt"],
+    )
+
+    template_file_path = destination / "{{ project_name }}.txt"
+    test_file_path = destination / "test-project.txt"
+    assert template_file_path.exists()
+    assert not test_file_path.exists()

@@ -77,6 +77,7 @@ def new(
     destination = path / name
 
     template_path = template_options[template][0]
+    template_metadata = template_options[template][1]
 
     try:
         templating.render_template(
@@ -84,6 +85,7 @@ def new(
             template=template,
             destination=destination,
             template_path=template_path,
+            exclude=template_metadata.metadata.templating_excludes,
             prompt_if_duplicates=not force,
         )
     except templating.TemplatingException as e:
@@ -115,11 +117,13 @@ def deps(template: Optional[str] = typer.Argument(None)):
 
     if template is None:
         templates_with_dependencies = [
-            (template_name, dependencies)
-            for template_name, (_, _, dependencies) in template_options.items()
+            (template_name, toml_obj.metadata.template_requirements)
+            for template_name, (_, toml_obj) in template_options.items()
         ]
     else:
-        templates_with_dependencies = [(template, template_options[template][2])]
+        templates_with_dependencies = [
+            (template, template_options[template][1].metadata.template_requirements),
+        ]
 
     to_install = [
         (template_name, dependencies)

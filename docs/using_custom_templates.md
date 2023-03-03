@@ -128,10 +128,11 @@ website = "https://itmpl.ihh.dev/"
 The `metadata` table is used to store metadata about the template. The
 following metadata fields are available:
 
-| Field Name              | Description                                                                                                                                          |
-|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `template_description`  | A description of the template. This is used in `itmpl list` to display the purpose of the template.                                                  |
-| `template_requirements` | A list of requirements for the template. This is used in `itmpl list` to display the requirements, and `itmpl deps` to install project dependencies. |
+| Field Name              | Description                                                                                                                                                                         |
+|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `template_description`  | A description of the template. This is used in `itmpl list` to display the purpose of the template.                                                                                 |
+| `template_requirements` | A list of requirements for the template. This is used in `itmpl list` to display the requirements, and `itmpl deps` to install project dependencies.                                |
+ | `templating_excludes`   | A list of glob patterns to exclude from templating. This is useful if you have files that you don't want to be templated, but still want to be copied to the destination directory. |
 
 ### Variables
 

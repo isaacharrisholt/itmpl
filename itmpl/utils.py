@@ -7,6 +7,8 @@ from typing import Iterable, List, Tuple
 
 from rich.table import Table
 
+from itmpl.metadata import ItmplToml
+
 
 def import_external_module(module_path: Path) -> ModuleType:
     """Import a module from an external path."""
@@ -29,7 +31,7 @@ def import_external_module(module_path: Path) -> ModuleType:
 
 
 def construct_table_from_templates(
-    templates: Iterable[Tuple[Path, str, List[str]]],
+    templates: Iterable[Tuple[Path, ItmplToml]],
 ) -> Table:
     """Construct a Rich table from a list of templates."""
     table = Table(show_header=True, header_style="bold")
@@ -37,8 +39,12 @@ def construct_table_from_templates(
     table.add_column("Description")
     table.add_column("Requirements")
 
-    for template in templates:
-        table.add_row(template[0].name, template[1], ", ".join(template[2]))
+    for template, toml_obj in templates:
+        table.add_row(
+            template.name,
+            toml_obj.metadata.template_description,
+            ", ".join(toml_obj.metadata.template_requirements),
+        )
 
     return table
 

@@ -10,6 +10,7 @@ from pydantic import ValidationError
 from rich import print
 
 from itmpl import config, global_vars, metadata, tree_utils, utils
+from itmpl.metadata import ItmplToml
 
 
 class DuplicateTemplateError(Exception):
@@ -17,7 +18,7 @@ class DuplicateTemplateError(Exception):
 
     def __init__(
         self,
-        duplicate_templates: Dict[str, Tuple[Path, str, List[str]]],
+        duplicate_templates: Dict[str, Tuple[Path, ItmplToml]],
     ) -> None:
         super().__init__()
         self.duplicate_templates = duplicate_templates
@@ -36,24 +37,20 @@ class TemplatingException(Exception):
     """Exception raised when there is an error with the templating."""
 
 
-def get_templates_in_dir(directory: Path) -> Dict[str, Tuple[Path, str, List[str]]]:
+def get_templates_in_dir(directory: Path) -> Dict[str, Tuple[Path, ItmplToml]]:
     """Return a list of templates in a directory with their descriptions."""
     templates = {}
     for path in directory.iterdir():
         if not path.is_dir():
             continue
 
-        meta = metadata.read_itmpl_toml(path / ".itmpl.toml")
-        templates[path.name] = (
-            path,
-            meta.metadata.template_description,
-            meta.metadata.template_requirements,
-        )
+        toml_obj = metadata.read_itmpl_toml(path / ".itmpl.toml")
+        templates[path.name] = (path, toml_obj)
 
     return templates
 
 
-def get_template_options() -> Dict[str, Tuple[Path, str, List[str]]]:
+def get_template_options() -> Dict[str, Tuple[Path, ItmplToml]]:
     """Return a list of template options and their descriptions."""
     c = config.read_config()
     default_template_options = get_templates_in_dir(global_vars.TEMPLATES_DIR)
@@ -158,19 +155,36 @@ def template_directory(
     dir_path: Path,
     variables: Dict[str, Any],
     ignore_undefined: bool = False,
+    exclude: Optional[List[str]] = None,
 ) -> None:
     """Template the contents of a directory using Jinja. Both file contents and
     filenames are templated."""
     directories_to_rename = []
 
+    exclusions = []
+
+    if exclude:
+        for pattern in exclude:
+            exclusions.extend([p.resolve() for p in dir_path.glob(pattern)])
+
     for root, dirs, files in os.walk(dir_path):
-        root = Path(root)
+        # Ignore directories that are in the exclude list
+        root = Path(root).resolve()
+
+        if root in exclusions:
+            continue
 
         for directory in dirs:
+            if root / directory in exclusions:
+                continue
+
             directories_to_rename.append(root / directory)
 
         for file in files:
             file_path = root / file
+
+            if file_path in exclusions:
+                continue
 
             # Ignore .itmpl files
             if file_path.name.startswith(".itmpl"):
@@ -212,6 +226,7 @@ def render_template(
     template: str,
     destination: Path,
     template_path: Path,
+    exclude: Optional[List[str]] = None,
     prompt_if_duplicates: bool = True,
 ):
     default_variables = {
@@ -235,7 +250,12 @@ def render_template(
         )
 
         variables = {**default_variables, **toml_variables, **python_variables}
-        template_directory(temp_project_dir, variables, ignore_undefined=True)
+        template_directory(
+            temp_project_dir,
+            variables,
+            exclude=exclude,
+            ignore_undefined=True,
+        )
 
         duplicates = list(
             tree_utils.find_duplicates(
@@ -264,7 +284,12 @@ def render_template(
         # any extraneous Jinja is ignored.
         if new_variables:
             try:
-                template_directory(destination, new_variables, ignore_undefined=False)
+                template_directory(
+                    destination,
+                    new_variables,
+                    exclude=exclude,
+                    ignore_undefined=False,
+                )
             except jinja2.exceptions.UndefinedError as e:
                 raise TemplatingException(
                     f"Error when templating directory: {e}"

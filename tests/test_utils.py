@@ -27,8 +27,8 @@ def test_import_external_module_nonexistent_module():
 def test_construct_table_from_templates():
     """Test that the construct_table_from_templates function works as expected."""
     templates = [
-        (Path("template1"), "Template 1 description"),
-        (Path("template2"), "Template 2 description"),
+        (Path("template1"), "Template 1 description", []),
+        (Path("template2"), "Template 2 description", []),
     ]
 
     table = utils.construct_table_from_templates(templates)

@@ -70,7 +70,7 @@ def _add_dependencies(final_directory: Path) -> None:
 def _get_package_versions(package_names: List[str]) -> Dict[str, str]:
     """Get installed package versions."""
     installed_packages_json = subprocess.run(
-        ["pip", "list", "--format=json"],
+        ["poetry", "run", "pip", "list", "--format=json"],
         capture_output=True,
         text=True,
         check=True,

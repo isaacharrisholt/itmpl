@@ -1,4 +1,6 @@
+import subprocess
 from pathlib import Path
+from typing import Optional
 
 import typer
 from rich import print
@@ -7,7 +9,7 @@ from typer import Typer
 from itmpl import config, global_vars, templating, utils
 
 app = Typer()
-app.add_typer(config.app, name="config")
+app.add_typer(config.app, name="config", help="Manage iTmpl configuration.")
 
 
 @app.command("list")
@@ -89,6 +91,60 @@ def new(
         raise typer.Exit(1)
 
     print(f"Created [green]{template}[/green] project at [green]{destination}[/green]")
+
+
+@app.command()
+def deps(template: Optional[str] = typer.Argument(None)):
+    """Install dependencies for the specified template. If no template is specified,
+    install dependencies for all templates."""
+    try:
+        template_options = templating.get_template_options()
+    except templating.DuplicateTemplateError as e:
+        print("[red]Duplicate templates found:[/red]")
+        print(utils.construct_table_from_templates(e.duplicate_templates.values()))
+        print("[red]Please remove the duplicates and try again.[/red]")
+        raise typer.Exit(1)
+
+    if template is not None and template not in template_options:
+        print(
+            f"[red]Template [white]{template}[/white] not found. "
+            f"Available templates:[/red]"
+        )
+        print(utils.construct_table_from_templates(template_options.values()))
+        raise typer.Exit(1)
+
+    if template is None:
+        templates_with_dependencies = [
+            (template_name, dependencies)
+            for template_name, (_, _, dependencies) in template_options.items()
+        ]
+    else:
+        templates_with_dependencies = [(template, template_options[template][2])]
+
+    to_install = [
+        (template_name, dependencies)
+        for template_name, dependencies in templates_with_dependencies
+        if dependencies
+    ]
+
+    if not to_install:
+        print("[green]No dependencies to install.[/green]")
+        raise typer.Exit(0)
+
+    for template_name, dependencies in to_install:
+        print(
+            f"[green]Installing dependencies for template "
+            f"[white]{template_name}[/white][/green]"
+        )
+        try:
+            utils.install_dependencies(dependencies)
+        except subprocess.CalledProcessError as e:
+            print(
+                f"[red]Error installing dependencies for template "
+                f"[white]{template_name}[/white]: {e}[/red]"
+            )
+
+    print("[green]Done.[/green]")
 
 
 @app.callback()

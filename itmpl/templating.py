@@ -89,6 +89,8 @@ def get_default_variables(project_name: str) -> Dict[str, Any]:
     return {
         "project_name": project_name,
         "project_title": project_name.replace("-", " ").replace("_", " ").title(),
+        "current_year": utils.get_current_year(),
+        "current_datetime": utils.get_current_datetime(),
     }
 
 

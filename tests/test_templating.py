@@ -166,10 +166,10 @@ def test_get_default_variables():
     """Test that the get_default_variables function works as expected."""
     variables = templating.get_default_variables(project_name="test-project")
 
-    assert variables == {
-        "project_name": "test-project",
-        "project_title": "Test Project",
-    }
+    assert variables["project_title"] == "Test Project"
+    assert variables["project_name"] == "test-project"
+    assert variables["current_year"] is not None
+    assert variables["current_datetime"] is not None
 
 
 def test_get_toml_variables(template_dirs):

@@ -48,6 +48,17 @@ The templating flow is as follows:
       to remain the destination directory with `.itmpl`, e.g. requirements
       files.
 
+## Default Variables
+
+iTmpl provides a set of default variables that are available to all templates.
+
+| Variable Name      | Description                                                                                                    |
+|--------------------|----------------------------------------------------------------------------------------------------------------|
+| `project_name`     | The name of the project, as entered by the user.                                                               |
+| `project_title`    | The project name, with underscores replaced with spaces and in title case (e.g. `my_project` -> `My Project`). |
+| `current_year`     | The current year.                                                                                              |
+| `current_datetime` | The current date and time in isoformat, with a resolution of seconds (e.g. `2023-01-01 12:34:56`).             |
+
 ## The `.itmpl.py` File
 
 The `.itmpl.py` file is used to store Python code that is used to configure the

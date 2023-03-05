@@ -1,6 +1,7 @@
 import importlib.util
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 from types import ModuleType
 from typing import Iterable, List, Tuple
@@ -54,3 +55,13 @@ def install_dependencies(dependencies: List[str]):
     subprocess.check_call(
         [sys.executable, "-m", "pip", "install", *dependencies],
     )
+
+
+def get_current_year() -> str:
+    """Get the current year."""
+    return str(datetime.now().year)
+
+
+def get_current_datetime() -> str:
+    """Get the current datetime."""
+    return str(datetime.now().isoformat(timespec="seconds"))
